@@ -1,4 +1,5 @@
-﻿using EnviarCorreo.Modelo;
+﻿using EnviarCorreo.Data;
+using EnviarCorreo.Modelo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,12 +20,12 @@ namespace EnviarCorreo
             InitializeComponent();
         }
 
-        public static void SendEmail()
+        public static void SendEmail(string Mail)
         {
             try
             {
                 System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage();
-                msg.To.Add("moisesmuguicha@gmail.com");
+                msg.To.Add("" + Mail + "");
                 msg.Subject = ("Bienvenida Estimad@ ");
                 msg.SubjectEncoding = System.Text.Encoding.UTF8;
                 msg.IsBodyHtml = true;
@@ -49,14 +50,15 @@ namespace EnviarCorreo
 
                 //  string plnatilla = Beneficios.
 
-                string Mail = "moisesmuguicha@gmail.com";
+                //string Mail = "jaimervelez@hotmail.com";
 
                 string Pin = "11125";
 
 
                 //  string pathToFiles = Server.MapPath("/UploadedFiles");
 
-                string appPath = Path.GetFullPath("").Replace("", "");
+                string appPath = Path.GetFullPath("~").Replace("~", "");
+
                 body = File.ReadAllText(appPath + "/Plantilla/" + Plantilla);
 
                 //using (StreamReader reader = new StreamReader(Server.MapPath("~/Plantillas/" + Plantilla + "")))
@@ -74,7 +76,7 @@ namespace EnviarCorreo
                 msg.From = new System.Net.Mail.MailAddress("" + Mail + "");
 
                 System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient();
-                cliente.Credentials = new System.Net.NetworkCredential("jairo90", "D@v1");
+                cliente.Credentials = new System.Net.NetworkCredential("moisesmuguicha@gmail.com", "1722388772");
 
                 cliente.Port = 587;
                 cliente.EnableSsl = true;
@@ -91,7 +93,15 @@ namespace EnviarCorreo
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            SendEmail();
+            DP_Clientes modelo = new DP_Clientes();
+            List<Clientes> contratos = modelo.BuscarContratosPorIdCliente();
+
+            foreach (Clientes clientes in contratos)
+            {
+
+                string envio = clientes.Correo;
+                SendEmail(envio);
+            }
         }
     }
 }
